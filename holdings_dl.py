@@ -64,7 +64,6 @@ class HoldingsDownloader:
         if not self.quiet_mode:
             print("complete")
 
-    # Reads ETFs.txt and returns a sorted list of the ETF names
     def generate_csv_files(self):
         if not self.quiet_mode:
             print("Retrieving holdings information")
