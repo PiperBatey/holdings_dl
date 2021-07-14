@@ -2,7 +2,6 @@
 
 > A simple Python script that downloads the top 25 holdings of one or more ETFs into a .csv file
 
-<br>
 
 ## Table of Contents
 
@@ -15,7 +14,7 @@
   * [Generate Log](#generate-log)
   * [Error Handling](#error-handling)
 - [Resources](#resources)
-- [Authors](#authors)
+- [Author](#author)
 - [Version History](#version-history)
 - [License](#license)
 
@@ -61,7 +60,6 @@ VTI-holdings.csv
 |AAPL  |Apple Inc     |4.39%   |
 | ... | ...           | ...    |
 
-<br>
 
 ### General Usage
     holdings_dl.py [-h] (-f FILE | -s SYMBOL) [-q] [-l] [-a]
@@ -102,7 +100,6 @@ Ex. `MyFile.txt`
         SPY\n
         QQQ\n
         
-<br>
 
 ### Generate Log
 Specify `--log` or `-l` at the command line in order to 
@@ -139,7 +136,7 @@ VTI-holdings.csv
 |SPY   |SPDR S&P 500  |430.92                |
 |VTI   |Vanguard Total Stock Market ETF|223.18 |
 
-<br>
+
 
 ### Error Handling
 
