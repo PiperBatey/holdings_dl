@@ -20,7 +20,7 @@
 
 ## Dependencies
 
-* [Python 3](https://www.python.org/) (tested on 3.6 and 3.9)
+* [Python 3](https://www.python.org/) (tested on 3.6 and 3.8)
 * [Pandas](https://pandas.pydata.org/)
   * [NumPy](https://numpy.org/)
   * [lxml](https://pypi.org/project/lxml/)
@@ -113,7 +113,7 @@ Using the `--alpha` or `-a` flag will sort the ETFs alphabetically by symbol in 
 
      $ python3 holdings_dl.py -s VTI -s SPY -s QQQ -l -a
 
-###### Terminal Output
+##### Terminal Output
 ```
 Retrieving holdings information
 QQQ ... complete
@@ -128,7 +128,7 @@ SPY-holdings.csv
 VTI-holdings.csv
 ```
 
-###### etf-log.csv
+##### etf-log.csv
 
 |Symbol|Name          |Previous Closing Price|
 |------|--------------|----------------------|
@@ -140,11 +140,11 @@ VTI-holdings.csv
 
 ### Error Handling
 
-###### Invalid ETF Symbols
+##### Invalid ETF Symbols
 ETF symbols that cannot be found on the [YCharts.com](https://ycharts.com/stocks) database will not be downloaded and will not appear in `etf-log.csv`.
 If such a symbol is encountered, an error message will be printed to the terminal and the program will continue retrieving any remaining ETFs.
 
-###### Invalid Input Files
+##### Invalid Input Files
 
 If a file specified with the `--file` flag does not exist in the local directory, the program will quit with an error message.
 If the file exists but is not in the proper format (plain text ETF symbols followed by `\n`), the program will encounter undefined behavior.
