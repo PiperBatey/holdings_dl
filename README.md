@@ -1,6 +1,23 @@
 # ETF Holdings DL
 
-A simple Python script that downloads the top 25 holdings of one or more ETFs into a .csv file.
+> A simple Python script that downloads the top 25 holdings of one or more ETFs into a .csv file
+
+<br>
+
+## Table of Contents
+
+- [Dependencies](#dependencies)
+- [Description](#description)
+- [**How to Use**](#how-to-use)
+  * [Simple Example](#simple-example)
+  * [General Usage](#general-usage)
+  * [Input Modes](#input-modes)
+  * [Generate Log](#generate-log)
+  * [Error Handling](#error-handling)
+- [Resources](#resources)
+- [Authors](#authors)
+- [Version History](#version-history)
+- [License](#license)
 
 ## Dependencies
 
@@ -11,7 +28,6 @@ A simple Python script that downloads the top 25 holdings of one or more ETFs in
 * [yfinance](https://pypi.org/project/yfinance/)
     * [Requests](https://docs.python-requests.org/en/master/)
 
-
 ## Description
 
 This program is run from the command line and accepts ETF symbols either as command arguments or from a text file in the local directory.
@@ -19,15 +35,16 @@ The top 25 holdings of each ETF will be saved in the local directory as `<ETF_sy
 
 An optional log file can be generated that contains a list of the successfully downloaded ETFs, their full names, and their previous closing price.
 
+
 ## How to Use
 
 ### Simple Example
 
-Generate a file in the local directory named VTI-holdings.csv containing top 25 holdings of the ETF:
+Generate a file in the local directory named VTI-holdings.csv containing top 25 holdings of the ETF
 
     $ python3 holdings_dl.py -s VTI
 
-###### Terminal Output
+##### Terminal Output
 ```
 Retrieving holdings information
 VTI ... complete
@@ -36,7 +53,7 @@ VTI ... complete
 VTI-holdings.csv
 ```
 
-###### VTI-holdings.csv
+##### VTI-holdings.csv
 
 |Symbol|Name          |% Weight|
 |:------:|--------------|--------|
@@ -44,6 +61,7 @@ VTI-holdings.csv
 |AAPL  |Apple Inc     |4.39%   |
 | ... | ...           | ...    |
 
+<br>
 
 ### General Usage
     holdings_dl.py [-h] (-f FILE | -s SYMBOL) [-q] [-l] [-a]
@@ -63,7 +81,7 @@ VTI-holdings.csv
 
 There are two ways to provide input to the program: either by symbol or by file list. This is specified by the user as a required command line argument.
 
-####1. Use `--symbol` or `-s` to input an ETF symbol directly
+#### 1. Use `--symbol` or `-s` to input an ETF symbol directly
 
 
 This was used in the simple example above, however it is worth noting that repeating the flag allows for the input of multiple symbols at a time.
@@ -71,11 +89,11 @@ This was used in the simple example above, however it is worth noting that repea
     $ python3 holdings_dl.py --symbol VTI -s SPY -s QQQ  
 
 
-####2. Use `--file` or `-f` to specify a text file
+#### 2. Use `--file` or `-f` to specify a text file
 
     $ python3 holdings_dl.py -f MyFile.txt
 
-   A valid input file contains a plaintext list of ETF symbols, each followed by a newline. 
+   A valid input file contains a plain text list of ETF symbols, each followed by a newline. 
    Only one file will be accepted at a time.
 
 Ex. `MyFile.txt`
@@ -83,7 +101,8 @@ Ex. `MyFile.txt`
         VTI\n
         SPY\n
         QQQ\n
-
+        
+<br>
 
 ### Generate Log
 Specify `--log` or `-l` at the command line in order to 
@@ -120,11 +139,25 @@ VTI-holdings.csv
 |SPY   |SPDR S&P 500  |430.92                |
 |VTI   |Vanguard Total Stock Market ETF|223.18 |
 
+<br>
+
+### Error Handling
+
+###### Invalid ETF Symbols
+ETF symbols that cannot be found on the [YCharts.com](https://ycharts.com/stocks) database will not be downloaded and will not appear in `etf-log.csv`.
+If such a symbol is encountered, an error message will be printed to the terminal and the program will continue retrieving any remaining ETFs.
+
+###### Invalid Input Files
+
+If a file specified with the `--file` flag does not exist in the local directory, the program will quit with an error message.
+If the file exists but is not in the proper format (plain text ETF symbols followed by `\n`), the program will encounter undefined behavior.
+
+
 ## Resources
 All holdings data comes  from [YCharts.com](https://ycharts.com/stocks) via the pandas [read_html](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_html.html) function.
 Information in `etf-log.csv` is retrieved using [yfinance](https://pypi.org/project/yfinance/).
 
-## Authors
+## Author
 
 Piper Batey (pbatey@umich.edu)
 
@@ -135,4 +168,4 @@ Piper Batey (pbatey@umich.edu)
 
 ## License
 
-MIT license
+MIT License (see LICENSE file)
