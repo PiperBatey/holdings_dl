@@ -44,12 +44,9 @@ class HoldingsDownloader:
         parser.add_argument("-a", "--alpha", action="store_true",
                             help="sort the ETF symbols into alphabetical order for output")
         args = parser.parse_args()  # get args from the command line
-        if args.quiet:
-            self.quiet_mode = True
-        if args.log:
-            self.log_mode = True
-        if args.alpha:
-            self.sort_mode = True
+        self.quiet_mode = args.quiet
+        self.log_mode = args.log
+        self.sort_mode = args.alpha
         if args.file:
             self.file_name = args.file
         if args.symbol:
