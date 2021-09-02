@@ -1,6 +1,6 @@
 # ETF Holdings DL
 
-> A simple Python script that downloads the top 25 holdings of one or more ETFs into a .csv file
+> A simple Python script that downloads the holdings of one or more ETFs into .csv files
 
 
 ## Table of Contents
@@ -24,13 +24,13 @@
 * [Pandas](https://pandas.pydata.org/)
   * [NumPy](https://numpy.org/)
   * [lxml](https://pypi.org/project/lxml/)
-* [yfinance](https://pypi.org/project/yfinance/)
-    * [Requests](https://docs.python-requests.org/en/master/)
+* [Selenium](https://selenium-python.readthedocs.io/)
+  * [GeckoDriver](https://github.com/mozilla/geckodriver/releases)
 
 ## Description
 
 This program is run from the command line and accepts ETF symbols either as command arguments or from a text file in the local directory.
-The top 25 holdings of each ETF will be saved in the local directory as `<ETF_symbol>-holdings.csv`.
+The holdings of each ETF will be saved in the local directory as `<ETF_symbol>-holdings.csv`.
 
 An optional log file can be generated that contains a list of the successfully downloaded ETFs, their full names, and their previous closing price.
 
@@ -39,59 +39,69 @@ An optional log file can be generated that contains a list of the successfully d
 
 ### Simple Example
 
-Generate a file in the local directory named VTI-holdings.csv containing top 25 holdings of the ETF
+Download the holdings data of an ETF and generate a file in the local directory named QQQ-holdings.csv:
 
-    $ python3 holdings_dl.py -s VTI
+    $ holdings_dl.py --symbol QQQ
 
 ##### Terminal Output
 ```
-Retrieving holdings information
-VTI ... complete
+Opening QQQ database
+QQQ: page 1 of 2 ... complete
+QQQ: page 2 of 2 ... complete
+QQQ: 103 holdings retrieved
+
 
 1 file(s) have been generated for 1 ETF(s):
-VTI-holdings.csv
+QQQ-holdings.csv
 ```
 
-##### VTI-holdings.csv
+##### QQQ-holdings.csv
 
-|Symbol|Name          |% Weight|
-|:------:|--------------|--------|
-|MSFT  |Microsoft Corp|4.39%   |
-|AAPL  |Apple Inc     |4.39%   |
-| ... | ...           | ...    |
+| Symbol | Description | % Portfolio Weight | Shares Held | Market Value |
+| --- | --- | --- | --- | --- |
+| AAPL | Apple Inc | 11.34% | 142.8M | $21.9B |
+| MSFT | Microsoft Corp | 10.15% | 64.5M | $19.6B |
+| AMZN | Amazon.com Inc | 7.66% | 4.3M | $14.8B |
+| ... | ... | ... | ... | ... |
 
 
-### General Usage
-    holdings_dl.py [-h] (-f FILE | -s SYMBOL) [-q] [-l] [-a]
-
-      -f FILE, --file FILE  specify a file containing a list of ETF symbols
-      -s SYMBOL, --symbol SYMBOL
-                            specify an ETF symbol
+### Usage
+    holdings_dl.py [-h] (--symbol SYM [SYM ...] | --file FILE) [-l] [-a] [-w] [-q] [-t TIME]
+    
     optional arguments:
-      -h, --help            show help message and exit
-      -q, --quiet           suppress terminal output
-      -l, --log             create a log of the downloaded ETFs in etf-log.csv
-      -a, --alpha           sort the ETF symbols into alphabetical order for
-                            output
+      -h, --help              show this help message and exit
+      -l, --log               create a log of the downloaded ETFs in etf-log.csv
+      -a, --alpha             sort ETF symbols into alphabetical order for output
+      -w, --window            run web driver with firefox window visible
+      -q, --quiet             suppress verbose terminal output
+      -t TIME, --time TIME    set the maximum time in seconds the program will
+                              wait for web pages to load (default: 15)
+    
+    required arguments:
+      --symbol SYM [SYM ...]  specify one or more ETF symbols
+      --file FILE             specify a file containing a list of ETF symbols
 
 
 ### Input Modes
 
-There are two ways to provide input to the program: either by symbol or by file list. This is specified by the user as a required command line argument.
+There are two ways to provide input to the program: either by symbol or by file list. 
+The user is required to make this selection on the command line.
 
-#### 1. Use `--symbol` or `-s` to input an ETF symbol directly
+#### 1. Symbol Input
+
+Using the `--symbol` flag allows the user to input one or more ETF symbols directly on the command line.
+
+    $ holdings_dl.py --symbol VTI SPY QQQ  
 
 
-This was used in the simple example above, however it is worth noting that repeating the flag allows for the input of multiple symbols at a time.
+#### 2. File Input
 
-    $ python3 holdings_dl.py --symbol VTI -s SPY -s QQQ  
+Using the `--file` flag allows the user to input the name of a file in the local directory with a list of ETF symbols in the proper format.
 
 
-#### 2. Use `--file` or `-f` to specify a text file
+    $ holdings_dl.py -f MyFile.txt
 
-    $ python3 holdings_dl.py -f MyFile.txt
-
-   A valid input file contains a plain text list of ETF symbols, each followed by a newline. 
+   A valid input file contains a plain text list of ETF symbols each followed by a newline. 
    Only one file will be accepted at a time.
 
 Ex. `MyFile.txt`
@@ -115,33 +125,43 @@ Using the `--alpha` or `-a` flag will sort the ETFs alphabetically by symbol in 
 
 ##### Terminal Output
 ```
-Retrieving holdings information
-QQQ ... complete
-SPY ... complete
-VTI ... complete
-Generating etf-log.csv ... complete
+Opening QQQ database
+QQQ: page 1 of 2 ... complete
+QQQ: page 2 of 2 ... complete
+QQQ: 103 holdings retrieved
+
+Opening ARKK database
+ARKK: page 1 of 1 ... complete
+ARKK: 50 holdings retrieved
+
+Opening XLK database
+XLK: page 1 of 2 ... complete
+XLK: page 2 of 2 ... complete
+XLK: 76 holdings retrieved
+
+Generating log file... complete
 
 4 file(s) have been generated for 3 ETF(s):
 etf-log.csv
 QQQ-holdings.csv
-SPY-holdings.csv
-VTI-holdings.csv
+ARKK-holdings.csv
+XLK-holdings.csv
 ```
 
 ##### etf-log.csv
 
-|Symbol|Name          |Previous Closing Price|
-|------|--------------|----------------------|
-|QQQ   |Invesco QQQ Trust, Series 1|358.77   |
-|SPY   |SPDR S&P 500  |430.92                |
-|VTI   |Vanguard Total Stock Market ETF|223.18 |
+| Symbol | Name | Last Price | Number of Holdings |
+| --- | --- | --- | --- |
+| QQQ | Invesco QQQ Trust | $380.40 | 103 |
+| ARKK | ARK Innovation ETF | $124.83 | 50  |
+| XLK | Technology Select Sector SPDR Fund | $158.73 | 76  |
 
 
 
 ### Error Handling
 
 ##### Invalid ETF Symbols
-ETF symbols that cannot be found on the [YCharts.com](https://ycharts.com/stocks) database will not be downloaded and will not appear in `etf-log.csv`.
+ETF symbols that cannot be found on the database will not be downloaded and will not appear in `etf-log.csv`.
 If such a symbol is encountered, an error message will be printed to the terminal and the program will continue retrieving any remaining ETFs.
 
 ##### Invalid Input Files
@@ -151,8 +171,9 @@ If the file exists but is not in the proper format (plain text ETF symbols follo
 
 
 ## Resources
-All holdings data comes  from [YCharts.com](https://ycharts.com/stocks) via the pandas [read_html](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_html.html) function.
-Information in `etf-log.csv` is retrieved using [yfinance](https://pypi.org/project/yfinance/).
+All data comes  from [Schwab](https://www.schwab.com/research/etfs/tools/compare) via 
+[Selenium](https://selenium-python.readthedocs.io/) and 
+[Pandas read_html](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_html.html)
 
 ## Author
 
@@ -160,8 +181,15 @@ Piper Batey (pbatey@umich.edu)
 
 ## Version History
 
+* 0.2
+  * Updated to retrieve all holdings of an ETF
+  * All data is now retrieved from [Schwab](https://www.schwab.com/research/etfs/tools/compare)
+
 * 0.1
     * Initial Release
+    * Retrieves the top 25 holdings of an ETF
+    * Holdings data is retrieved from [YCharts.com](https://ycharts.com/stocks)
+    * Log file information comes from [yfinance](https://pypi.org/project/yfinance/)
 
 ## License
 
