@@ -125,14 +125,14 @@ Using the `--alpha` or `-a` flag will sort the ETFs alphabetically by symbol in 
 
 ##### Terminal Output
 ```
+Opening ARKK database
+ARKK: page 1 of 1 ... complete
+ARKK: 50 holdings retrieved
+
 Opening QQQ database
 QQQ: page 1 of 2 ... complete
 QQQ: page 2 of 2 ... complete
 QQQ: 103 holdings retrieved
-
-Opening ARKK database
-ARKK: page 1 of 1 ... complete
-ARKK: 50 holdings retrieved
 
 Opening XLK database
 XLK: page 1 of 2 ... complete
@@ -143,8 +143,8 @@ Generating log file... complete
 
 4 file(s) have been generated for 3 ETF(s):
 etf-log.csv
-QQQ-holdings.csv
 ARKK-holdings.csv
+QQQ-holdings.csv
 XLK-holdings.csv
 ```
 
@@ -152,8 +152,8 @@ XLK-holdings.csv
 
 | Symbol | Name | Last Price | Number of Holdings |
 | --- | --- | --- | --- |
-| QQQ | Invesco QQQ Trust | $380.40 | 103 |
 | ARKK | ARK Innovation ETF | $124.83 | 50  |
+| QQQ | Invesco QQQ Trust | $380.40 | 103 |
 | XLK | Technology Select Sector SPDR Fund | $158.73 | 76  |
 
 
