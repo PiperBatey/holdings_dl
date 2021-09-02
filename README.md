@@ -91,7 +91,7 @@ The user is required to make this selection on the command line.
 
 Using the `--symbol` flag allows the user to input one or more ETF symbols directly on the command line.
 
-    $ holdings_dl.py --symbol VTI SPY QQQ  
+    $ holdings_dl.py --symbol XLK QQQ ARKK 
 
 
 #### 2. File Input
@@ -106,9 +106,9 @@ Using the `--file` flag allows the user to input the name of a file in the local
 
 Ex. `MyFile.txt`
 
-        VTI\n
-        SPY\n
+        XLK\n
         QQQ\n
+        ARKK\n
         
 
 ### Generate Log
@@ -121,7 +121,7 @@ Using the `--alpha` or `-a` flag will sort the ETFs alphabetically by symbol in 
 
 #### Example:
 
-     $ python3 holdings_dl.py -s VTI -s SPY -s QQQ -l -a
+     $ holdings_dl.py --symbol XLK QQQ ARKK -l -a
 
 ##### Terminal Output
 ```
