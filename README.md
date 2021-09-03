@@ -40,7 +40,7 @@ An optional log file can be generated that contains a list of the successfully d
 
 ### Simple Example
 
-Download the holdings data of the ETF with the the symbol `QQQ`:
+Download the holdings data of the ETF with the symbol `QQQ`:
 
 ```
 $ python3 holdings_dl.py --symbol QQQ
