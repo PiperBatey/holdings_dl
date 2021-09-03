@@ -89,7 +89,7 @@ Entries are sorted in descending order by portfolio weight.
 The program supports two ways to input ETF symbols.
 The user is required to choose one of the two modes on the command line.
 
-#### 1. Symbol Input
+#### Symbol Input
 
   Running the program with the `--symbol` flag allows the user to input one or more ETF symbols directly on the command line.
 
@@ -98,7 +98,7 @@ The user is required to choose one of the two modes on the command line.
 ```
 
 
-#### 2. File Input
+#### File Input
 
 Running the program with the `--file` flag allows the user to input the name of a file in the local directory with a list of ETF symbols in the proper format.
 
@@ -155,15 +155,38 @@ Providing the `--alpha` or `-a` flag sorts the ETF symbols alphabetically before
 
 ### Error Handling
 
-##### Invalid ETF Symbols
+#### Invalid ETF Symbols
 ETF symbols that cannot be found on the database will not be downloaded and will not appear in `etf-log.csv`.
 If such a symbol is encountered, an error message will be printed to the terminal and the program will continue retrieving any remaining ETFs.
+```
+$ python3 holdings_dl.py --symbol XLK FAKE QQQ -l
 
-##### Invalid Input Files
+Opening XLK database
+XLK: page 1 of 2 ... complete
+XLK: page 2 of 2 ... complete
+XLK: 76 holdings retrieved
+
+Opening FAKE database
+FAKE is not a valid ETF (not found in schwab database)
+
+Opening QQQ database
+QQQ: page 1 of 2 ... complete
+QQQ: page 2 of 2 ... complete
+QQQ: 103 holdings retrieved
+
+Generating log file... complete
+
+3 file(s) have been generated for 2 ETF(s):
+etf-log.csv
+XLK-holdings.csv
+QQQ-holdings.csv
+```
+
+#### Invalid Input Files
 
 If a file specified with the `--file` flag does not exist in the local directory, the program will quit with an error message.
 If the file exists but is not in the proper format (plain text ETF symbols followed by `\n`), the program will encounter undefined behavior.
-Only one input file will be accepted at a time.
+Only one input file can be accepted at a time.
 
 
 ## Resources
