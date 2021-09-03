@@ -29,18 +29,18 @@
 
 ## Description
 
-This program is run from the command line and accepts ETF symbols either as command arguments or from a text file in the local directory.
-The holdings of each ETF will be saved in the local directory as `<ETF_symbol>-holdings.csv`.
+This script accepts one or more ETF symbols either as command line arguments or from a properly-formatted text file in the local directory.
+For every valid ETF, a file named`<ETF_symbol>-holdings.csv` is saved in the local directory and contains the symbol, description, portfolio weight, number of shares held, and market value of each holding in the ETF.
 
-An optional log file can be generated that contains a list of the successfully downloaded ETFs, their full names, and their previous closing price.
-
+An optional log file can be generated that contains the list of successfully downloaded ETF symbols, descriptions and most recent market prices.
+This file will be saved in the local directory as `etf-log.csv`.
 
 ## How to Use
 
 
 ### Simple Example
 
-Download the holdings data of the ETF with the symbol `QQQ`:
+This command downloads the holdings data of the ETF with the symbol `QQQ` :
 
 ```
 $ python3 holdings_dl.py --symbol QQQ
@@ -54,10 +54,10 @@ QQQ: 103 holdings retrieved
 QQQ-holdings.csv
 ```
 
-Data about each of the ETF's holdings is saved in the local directory under `QQQ-holdings.csv`.
+A list of the ETF's holdings is saved in the local directory as `QQQ-holdings.csv`.
 Entries are sorted in descending order by portfolio weight.
 
-| Symbol | Description | % Portfolio Weight | Shares Held | Market Value |
+| Symbol | Description | Portfolio Weight | Shares Held | Market Value |
 | --- | --- | --- | --- | --- |
 | AAPL | Apple Inc | 11.34% | 142.8M | $21.9B |
 | MSFT | Microsoft Corp | 10.15% | 64.5M | $19.6B |
@@ -87,7 +87,7 @@ Entries are sorted in descending order by portfolio weight.
 ### Input Modes
 
 The program supports two ways to input ETF symbols.
-The user is required to choose one of the two modes on the command line.
+The user is required to specify the input mode on the command line.
 
 #### Symbol Input
 
@@ -116,6 +116,7 @@ A valid input file contains a plain text list of ETF symbols each followed by a 
 Use `--log` or `-l` on the command line to generate a file in the local directory named `etf-log.csv`.
 Providing the `--alpha` or `-a` flag sorts the ETF symbols alphabetically before generating the log file.
 
+Example:
 
 ```
   $ python3 holdings_dl.py --symbol XLK QQQ ARKK -l -a
@@ -152,12 +153,13 @@ Providing the `--alpha` or `-a` flag sorts the ETF symbols alphabetically before
 | XLK | Technology Select Sector SPDR Fund | $158.73 | 76  |
 
 
-
 ### Error Handling
 
 #### Invalid ETF Symbols
-ETF symbols that cannot be found on the database will not be downloaded and will not appear in `etf-log.csv`.
+ETF symbols that cannot be found on the schwab database will not be downloaded and will not appear in `etf-log.csv`.
 If such a symbol is encountered, an error message will be printed to the terminal and the program will continue retrieving any remaining ETFs.
+
+Example:
 ```
 $ python3 holdings_dl.py --symbol XLK FAKE QQQ -l
 
@@ -184,9 +186,9 @@ QQQ-holdings.csv
 
 #### Invalid Input Files
 
+Only one input file can be accepted at a time.
 If a file specified with the `--file` flag does not exist in the local directory, the program will quit with an error message.
 If the file exists but is not in the proper format (plain text ETF symbols followed by `\n`), the program will encounter undefined behavior.
-Only one input file can be accepted at a time.
 
 
 ## Resources

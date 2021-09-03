@@ -13,7 +13,7 @@ from selenium.webdriver.support.ui import WebDriverWait
     File name: holdings_dl.py
     Author: Piper Batey
     Date created: 7/13/2021
-    Date last modified: 9/2/2021
+    Date last modified: 9/3/2021
     Python Version: 3.8
     Description: A simple Python script that downloads 
     the holdings of one or more ETFs into .csv files.
@@ -78,15 +78,7 @@ class HoldingsDownloader:
         if not self.quiet_mode:
             print("complete")
 
-    def run_schwab_download(self):
-        for symbol in self.etf_symbols:
-            if symbol in self.valid_etfs:
-                continue
-            if self.get_etf_from_schwab(symbol):
-                self.num_files += 1
-                self.valid_etfs.append(symbol)
-
-    def get_etf_from_schwab(self, etf_symbol):
+    def _get_etf_from_schwab(self, etf_symbol):
         if not self.quiet_mode:
             print("Opening {} database".format(etf_symbol))
         driver = webdriver.Firefox(options=self.firefox_options)
@@ -137,6 +129,7 @@ class HoldingsDownloader:
         # end while
         concat_result = pd.concat(dataframe_list)  # merge into a single dataframe
         result_df = concat_result.drop_duplicates()
+        result_df.columns = ['Symbol', 'Description', 'Portfolio Weight', 'Shares Held', 'Market Value']
         result_df.to_csv("{}-holdings.csv".format(etf_symbol), index=False)  # create the csv
         if self.log_mode:
             driver.execute_script("window.scrollTo(0, -document.body.scrollHeight);")   # info is at top of page
@@ -149,7 +142,15 @@ class HoldingsDownloader:
         if not self.quiet_mode:
             print("{}: {} holdings retrieved\n".format(etf_symbol, result_df.shape[0]))
         return True
-        # get_etf_from_schwab()
+        # _get_etf_from_schwab()
+
+    def run_schwab_download(self):
+        for symbol in self.etf_symbols:
+            if symbol in self.valid_etfs:  # skip duplicates
+                continue
+            if self._get_etf_from_schwab(symbol):
+                self.num_files += 1
+                self.valid_etfs.append(symbol)
 
     def generate_log_file(self):
         if not self.quiet_mode:
