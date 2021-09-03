@@ -9,7 +9,7 @@
 - [Description](#description)
 - [**How to Use**](#how-to-use)
   * [Simple Example](#simple-example)
-  * [General Usage](#general-usage)
+  * [Program Usage](#program-usage)
   * [Input Modes](#input-modes)
   * [Generate Log](#generate-log)
   * [Error Handling](#error-handling)
@@ -37,27 +37,25 @@ An optional log file can be generated that contains a list of the successfully d
 
 ## How to Use
 
----
 
 ### Simple Example
 
-```shell
-  $ python3 holdings_dl.py --symbol QQQ
-```
-This command downloads the holdings data of the ETF designated by the symbol `QQQ` and produces the following terminal output:
+Download the holdings data of the ETF with the the symbol `QQQ`:
 
 ```
-  Opening QQQ database
-  QQQ: page 1 of 2 ... complete
-  QQQ: page 2 of 2 ... complete
-  QQQ: 103 holdings retrieved
+$ python3 holdings_dl.py --symbol QQQ
+
+Opening QQQ database
+QQQ: page 1 of 2 ... complete
+QQQ: page 2 of 2 ... complete
+QQQ: 103 holdings retrieved
   
-  1 file(s) have been generated for 1 ETF(s):
-  QQQ-holdings.csv
+1 file(s) have been generated for 1 ETF(s):
+QQQ-holdings.csv
 ```
 
-The data is saved in a file in the local directory named `QQQ-holdings.csv` and contains information about each of the ETF's holdings.
-The entries are sorted in descending order by portfolio weight in the ETF:
+Data about each of the ETF's holdings is saved in the local directory under `QQQ-holdings.csv`.
+Entries are sorted in descending order by portfolio weight.
 
 | Symbol | Description | % Portfolio Weight | Shares Held | Market Value |
 | --- | --- | --- | --- | --- |
@@ -65,10 +63,10 @@ The entries are sorted in descending order by portfolio weight in the ETF:
 | MSFT | Microsoft Corp | 10.15% | 64.5M | $19.6B |
 | AMZN | Amazon.com Inc | 7.66% | 4.3M | $14.8B |
 | ... | ... | ... | ... | ... |  
-  
 
 
 ### Program Usage
+
     usage: holdings_dl.py [-h] (--symbol SYM [SYM ...] | --file FILE) [-l] [-a] [-w] [-q] [-t TIME]
     
     optional arguments:
@@ -115,15 +113,13 @@ A valid input file contains a plain text list of ETF symbols each followed by a 
 ```
 
 ### Generate Log
-Use `--log` or `-l` on the command line to 
-generate a file in the local directory named `etf-log.csv`:
+Use `--log` or `-l` on the command line to generate a file in the local directory named `etf-log.csv`.
+Providing the `--alpha` or `-a` flag sorts the ETF symbols alphabetically before generating the log file.
 
-```shell
+
+```
   $ python3 holdings_dl.py --symbol XLK QQQ ARKK -l -a
-```
 
-Note: providing the `--alpha` or `-a` flag has the program sort the ETF symbols alphabetically before generating the log file.
-```
   Opening ARKK database
   ARKK: page 1 of 1 ... complete
   ARKK: 50 holdings retrieved
@@ -147,7 +143,7 @@ Note: providing the `--alpha` or `-a` flag has the program sort the ETF symbols 
   XLK-holdings.csv
 ```
 
-`etf-log.csv` is saved in the local directory and contains a list of each ETF downloaded along with other useful information:
+`etf-log.csv` is saved in the local directory and contains a list of each ETF downloaded.
 
 | Symbol | Name | Last Price | Number of Holdings |
 | --- | --- | --- | --- |
