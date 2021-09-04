@@ -11,6 +11,7 @@
   * [Simple Example](#simple-example)
   * [Program Usage](#program-usage)
   * [Input Modes](#input-modes)
+  * [Data Formats](#data-formats)
   * [Generate Log](#generate-log)
   * [Error Handling](#error-handling)
 - [Resources](#resources)
@@ -114,7 +115,7 @@ A valid input file contains a plain text list of ETF symbols each followed by a 
  ARKK\n
 ```
 
-### Data Formatting
+### Data Formats
 In the simple example, the data in the output file is displayed with special characters and units.
 In order to generate the holdings files without these charaters, use the `--raw` or `-r` flag on the command line.
 In this mode, the portfolio weight is represented as a decimal value and the shares held and market value columns are expressed in USD.
