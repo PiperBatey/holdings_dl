@@ -227,6 +227,7 @@ Piper Batey (pbatey@umich.edu)
 * 0.3
   * Supports raw data output
   * Webdriver command line settings added
+  * Fixed stale reference bug
 
 * 0.2
   * Updated to retrieve all holdings of an ETF

@@ -123,7 +123,11 @@ class HoldingsDownloader:
             driver.close()
             return False
         page_elt = wait.until(ec.visibility_of_element_located((By.CLASS_NAME, "paginationContainer")))  # REQUIRED!!!
-        num_pages = math.ceil(float(page_elt.text.split(" ")[4]) / 60)
+        try:
+            num_pages = math.ceil(float(page_elt.text.split(" ")[4]) / 60)
+        except ec.StaleElementReferenceException:  # fixes stale reference bug
+            page_elt = wait.until(ec.visibility_of_element_located((By.CLASS_NAME, "paginationContainer")))
+            num_pages = math.ceil(float(page_elt.text.split(" ")[4]) / 60)
 
         # Read holdings data
         if not self.quiet_mode:
