@@ -33,6 +33,7 @@ class HoldingsDownloader:
         self.log_mode = False
         self.quiet_mode = False
         self.sort_mode = False
+        self.raw_mode = False
         # init
         self._parse_command_args()
         if self.file_name:
@@ -48,6 +49,7 @@ class HoldingsDownloader:
         input_type_group = title_group.add_mutually_exclusive_group(required=True)
         input_type_group.add_argument("--symbol", nargs='+', metavar="SYM", help="specify one or more ETF symbols")
         input_type_group.add_argument("--file", metavar="FILE", help="specify a file containing a list of ETF symbols")
+        parser.add_argument("-r", "--raw", action="store_true", help="save raw data without symbols or units")
         parser.add_argument("-l", "--log", action="store_true",
                             help="create a log of the downloaded ETFs in etf-log.csv")
         parser.add_argument("-a", "--alpha", action="store_true",
@@ -64,6 +66,7 @@ class HoldingsDownloader:
         self.log_mode = args.log
         self.sort_mode = args.alpha
         self.wait_time = args.time
+        self.raw_mode = args.raw
         if args.file:
             self.file_name = args.file
         if args.symbol:
@@ -77,6 +80,25 @@ class HoldingsDownloader:
                 self.etf_symbols.append(name[:-1])  # avoid the newline at the end
         if not self.quiet_mode:
             print("complete")
+
+    def _convert_units_to_float(self, x):  # gets raw data for dataframe .apply()
+        start = 0
+        if type(x) == float:
+            return x
+        if x[0] == '-':  # set negative portfolio weights to 0
+            return 0
+        if x[0] == '$':
+            start = 1
+        if x[-1] == '%':
+            return float(x[:-1]) / 100
+        if x[-1] == 'K':
+            return float(x[start:-1]) * 10e3
+        if x[-1] == 'M':
+            return float(x[start:-1]) * 10e6
+        if x[-1] == 'B':
+            return float(x[start:-1]) * 10e9
+        else:
+            return float(x[start:])
 
     def _get_etf_from_schwab(self, etf_symbol):
         if not self.quiet_mode:
@@ -130,6 +152,10 @@ class HoldingsDownloader:
         concat_result = pd.concat(dataframe_list)  # merge into a single dataframe
         result_df = concat_result.drop_duplicates()
         result_df.columns = ['Symbol', 'Description', 'Portfolio Weight', 'Shares Held', 'Market Value']
+        if self.raw_mode:  # strip symbols and units
+            result_df['Portfolio Weight'] = result_df['Portfolio Weight'].apply(self._convert_units_to_float)
+            result_df['Shares Held'] = result_df['Shares Held'].apply(self._convert_units_to_float)
+            result_df['Market Value'] = result_df['Market Value'].apply(self._convert_units_to_float)
         result_df.to_csv("{}-holdings.csv".format(etf_symbol), index=False)  # create the csv
         if self.log_mode:
             driver.execute_script("window.scrollTo(0, -document.body.scrollHeight);")   # info is at top of page

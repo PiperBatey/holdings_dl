@@ -67,10 +67,11 @@ Entries are sorted in descending order by portfolio weight.
 
 ### Program Usage
 
-    usage: holdings_dl.py [-h] (--symbol SYM [SYM ...] | --file FILE) [-l] [-a] [-w] [-q] [-t TIME]
-    
+    usage: holdings_dl.py [-h] (--symbol SYM [SYM ...] | --file FILE) [-r] [-l] [-a] [-w] [-q] [-t TIME]
+
     optional arguments:
       -h, --help              show this help message and exit
+      -r, --raw               save raw data without symbols or units
       -l, --log               create a log of the downloaded ETFs in etf-log.csv
       -a, --alpha             sort ETF symbols into alphabetical order for output
       -w, --window            run web driver with firefox window visible
@@ -81,6 +82,7 @@ Entries are sorted in descending order by portfolio weight.
     required arguments:
       --symbol SYM [SYM ...]  specify one or more ETF symbols
       --file FILE             specify a file containing a list of ETF symbols
+
   
 
 
@@ -94,7 +96,7 @@ The user is required to specify the input mode on the command line.
   Running the program with the `--symbol` flag allows the user to input one or more ETF symbols directly on the command line.
 
 ```shell
-  $ python3 holdings_dl.py --symbol XLK QQQ ARKK
+$ python3 holdings_dl.py --symbol XLK QQQ ARKK
 ```
 
 
@@ -103,7 +105,7 @@ The user is required to specify the input mode on the command line.
 Running the program with the `--file` flag allows the user to input the name of a file in the local directory with a list of ETF symbols in the proper format.
 
 ```shell
-  $ python3 holdings_dl.py --file MyFile.txt
+$ python3 holdings_dl.py --file MyFile.txt
 ```
 A valid input file contains a plain text list of ETF symbols each followed by a newline:
 ```
@@ -112,7 +114,26 @@ A valid input file contains a plain text list of ETF symbols each followed by a 
  ARKK\n
 ```
 
+### Data Formatting
+In the simple example, the data in the output file is displayed with special characters and units.
+In order to generate the holdings files without these charaters, use the `--raw` or `-r` flag on the command line.
+In this mode, the portfolio weight is represented as a decimal value and the shares held and market value columns are expressed in USD.
+
+Example:
+```
+$ python3 holdings_dl.py --symbol QQQ -r
+```
+Raw `QQQ-holdings.csv` :
+
+|Symbol|Description         |Portfolio Weight|Shares Held |Market Value  |
+|------|--------------------|----------------|------------|--------------|
+|AAPL  |Apple Inc           |0.1134          |1428000000.0|219000000000.0|
+|MSFT  |Microsoft Corp      |0.1015          |645000000.0 |196000000000.0|
+|AMZN  |Amazon.com Inc      |0.0766          |43000000.0  |148000000000.0|
+|...|...|...|...|...|
+
 ### Generate Log
+
 Use `--log` or `-l` on the command line to generate a file in the local directory named `etf-log.csv`.
 Providing the `--alpha` or `-a` flag sorts the ETF symbols alphabetically before generating the log file.
 
@@ -201,6 +222,10 @@ All data comes  from [Schwab](https://www.schwab.com/research/etfs/tools/compare
 Piper Batey (pbatey@umich.edu)
 
 ## Version History
+
+* 0.3
+  * Supports raw data output
+  * Webdriver command line settings added
 
 * 0.2
   * Updated to retrieve all holdings of an ETF
