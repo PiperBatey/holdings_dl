@@ -94,7 +94,7 @@ The user is required to specify the input mode on the command line.
 
 #### Symbol Input
 
-  Running the program with the `--symbol` flag allows the user to input one or more ETF symbols directly on the command line.
+  Running the program with the `--symbol` or `-s` flag allows the user to input one or more ETF symbols directly on the command line.
 
 ```shell
 $ python3 holdings_dl.py --symbol XLK QQQ ARKK
@@ -103,16 +103,16 @@ $ python3 holdings_dl.py --symbol XLK QQQ ARKK
 
 #### File Input
 
-Running the program with the `--file` flag allows the user to input the name of a file in the local directory with a list of ETF symbols in the proper format.
+Running the program with the `--file` or `-f` flag allows the user to input the name of a file in the local directory with a list of ETF symbols in the proper format.
 
 ```shell
 $ python3 holdings_dl.py --file MyFile.txt
 ```
 A valid input file contains a plain text list of ETF symbols each followed by a newline:
 ```
- XLK\n
- QQQ\n
- ARKK\n
+ XLK
+ QQQ
+ ARKK
 ```
 
 ### Data Formats
@@ -210,7 +210,7 @@ QQQ-holdings.csv
 
 Only one input file can be accepted at a time.
 If a file specified with the `--file` flag does not exist in the local directory, the program will quit with an error message.
-If the file exists but is not in the proper format (plain text ETF symbols followed by `\n`), the program will encounter undefined behavior.
+If the file exists but is not in the proper format (plain text ETF symbols followed by a newline), the program will encounter undefined behavior.
 
 
 ## Resources
