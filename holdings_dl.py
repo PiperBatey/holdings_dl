@@ -110,7 +110,7 @@ class HoldingsDownloader:
               "/index.asp?type=holdings&symbol={}".format(etf_symbol)
         try:
             driver.get(url)
-            show_sixty_items = driver.find_element_by_xpath("//a[@perpage='60']")
+            show_sixty_items = driver.find_element(By.XPATH,"//a[@perpage='60']")
             show_sixty_items.click()
         except ec.NoSuchElementException:
             if not self.quiet_mode:
@@ -141,7 +141,7 @@ class HoldingsDownloader:
             if not self.quiet_mode:
                 print("{}: page {} of {} ...".format(etf_symbol, current_page, num_pages), end=" ")
             driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-            next_button = driver.find_element_by_xpath("//li[@pagenumber='{}']".format(current_page))
+            next_button = driver.find_element(By.XPATH,"//li[@pagenumber='{}']".format(current_page))
             driver.execute_script("arguments[0].click();", next_button)
             while True:  # wait until the new data has loaded (read_html() is from pandas so can't use selenium wait)
                 time.sleep(.25)
@@ -163,7 +163,7 @@ class HoldingsDownloader:
         result_df.to_csv("{}-holdings.csv".format(etf_symbol), index=False)  # create the csv
         if self.log_mode:
             driver.execute_script("window.scrollTo(0, -document.body.scrollHeight);")   # info is at top of page
-            header_elt = driver.find_element_by_xpath("//div[@modulename='FirstGlance']")
+            header_elt = driver.find_element(By.by_xpath,"//div[@modulename='FirstGlance']")
             header_text = header_elt.text.split("\n")
             full_name = header_text[0].split(" {}:".format(etf_symbol))[0].encode("ascii", "ignore").decode()
             last_price = header_text[2].split(" ")[0]
